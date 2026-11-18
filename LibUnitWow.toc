@@ -1,0 +1,8 @@
+## Interface: 11508, 11509, 16001, 20506, 30405, 38002, 40402, 50504, 120100, 120105, 120107
+## Title: LibUnitWow
+## Notes: Load WoW addon XML and run Lua 5.1 tests
+## Author: LibUnitWow
+## Version: 1.0.0
+## LoadOnDemand: 1
+
+LibUnitWow.lua

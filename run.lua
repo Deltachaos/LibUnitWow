@@ -107,10 +107,13 @@ local function listSubdirs(path)
     for line in readCommand(command):gmatch("[^\r\n]+") do
         local trimmed = line:gsub("^%s+", ""):gsub("%s+$", "")
         if trimmed ~= "" then
-            if trimmed:sub(1, 1) == "/" or trimmed:sub(1, 1) == "\\" or trimmed:match("^%a:[/\\]") then
+            local prefix = path:gsub("[/\\]$", "") .. sep
+            if trimmed:sub(1, #prefix) == prefix
+                or trimmed:sub(1, 1) == "/" or trimmed:sub(1, 1) == "\\"
+                or trimmed:match("^%a:[/\\]") then
                 found[#found + 1] = trimmed
             else
-                found[#found + 1] = path .. sep .. trimmed
+                found[#found + 1] = prefix .. trimmed
             end
         end
     end

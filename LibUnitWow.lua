@@ -1,7 +1,7 @@
 -- Lua 5.1 loader and test runner for WoW addon libraries.
 -- Loads TOC entries and XML Script/Include files, then runs suites.
--- The test API matches the DeltaChess harness: suite, slug filters,
--- snapshots, discovery, and parallel workers.
+-- Provides suite registration, slug filters, snapshots, discovery,
+-- and parallel workers.
 
 local source = debug.getinfo(1, "S").source
 if source:sub(1, 1) == "@" then source = source:sub(2) end
@@ -316,24 +316,6 @@ function Test.runAll(dir)
     end
     if Test.parallelMode then return true end
     return Test.summary()
-end
-
-function Test.getEngineList()
-    if not _G.DeltaChess or not _G.DeltaChess.Engines then return {} end
-    local list = _G.DeltaChess.Engines:GetEngineList()
-    if not list or #list == 0 then return {} end
-    local allowedEnginesEnv = envValue("ALLOWED_ENGINES")
-    if not allowedEnginesEnv or allowedEnginesEnv == "" then return list end
-    local allowed = {}
-    for engineId in allowedEnginesEnv:gmatch("[^,]+") do
-        local trimmed = engineId:gsub("^%s+", ""):gsub("%s+$", ""):lower()
-        if trimmed ~= "" then allowed[trimmed] = true end
-    end
-    local filtered = {}
-    for i = 1, #list do
-        if allowed[(list[i].id or ""):lower()] then filtered[#filtered + 1] = list[i] end
-    end
-    return filtered
 end
 
 local function addSlugs(list, text)
